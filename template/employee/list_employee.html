@@ -1,0 +1,44 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="min-height-200px">
+	<div class="container pd-0">
+		<div class="page-header">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="title">
+						<h4>Directorio de empleados</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="contact-directory-list">
+			<ul class="row">
+				{% for i in employee %}
+					<li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+						<div class="contact-directory-box" style="min-height: 200px !important;">
+							<div class="contact-dire-info text-center">
+								<div class="contact-avatar">
+									<span>
+										<img src="{% static 'vendors/images/photo2.jpg' %}" alt="">
+									</span>
+								</div>
+								<div class="contact-name">
+									<h4>{{i.name}}</h4>
+									<div class=""><i class="icon-copy ion-at"></i>&nbsp;{{i.email}}</div>
+									<div class="work text-success"><i class="ion-ios-telephone"></i>&nbsp;{{i.phone}}</div>
+								</div>
+							</div>
+							<div class="view-contact">
+								<a href="{% url 'GET_EMPLOYEE' 1 %}">Ver Perfil</a>
+							</div>
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
