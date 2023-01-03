@@ -3,65 +3,19 @@
 {% load static %}
 {% block content %}
 
-<style>
-        @import url('//fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,800&display=swap');
-        .cargando{
-            width: 120px;
-            height: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin: 0 auto; 
-            z-index:99;
-        }
-        .texto-cargando{ 
-            padding-top:10px
-        }
-        .cargando span{
-            font-size: 20px;
-            text-transform: uppercase;
-        }
-        .pelotas {
-            width: 30px;
-            height: 30px;
-            background-color: #ffd333;
-            animation: salto .5s alternate
-            infinite;
-        border-radius: 50%  
-        }
-        .pelotas:nth-child(2) {
-            animation-delay: .18s;
-        }
-        .pelotas:nth-child(3) {
-            animation-delay: .37s;
-        }
-        @keyframes salto {
-            from {
-                transform: scaleX(1.25);
-            }
-            to{
-                transform: 
-                translateY(-50px) scaleX(1);
-            }
-        }
-</style>
-
 <div class="card-box mb-30">
 	<div class="pd-20">
 		<h4 class="text-blue h4">Listado de Facturas{{type_invoice}}</h4>
 	</div>
-	<div class="pb-20" id="data_invoice">
-		
-	</div>
+	<div class="pb-20" id="data_invoice"></div>
 </div>
 
 {% endblock %}
 {% block script %}
 
 <script>
-	file = '{{json}}'
-	url = "http://localhost:8000/static/"+file
+	url = '{{json}}'
+	
 	$.get(url, function(data) {
         var content = data;
         $("#data_invoice").append(`
@@ -79,7 +33,6 @@
 				<tbody class="father"></tbody>
 			</table>
         `)
-        console.log(content)
         for(var i = 0; i < content.length; i++){
         	$(".father").append(`
         		<tr>
@@ -95,10 +48,18 @@
 							</a>
 							<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 								<a class="dropdown-item" href="http://localhost:8000/invoice_fe/View_Invoice/${content[i].consecutive}"><i class="dw dw-eye"></i> Ver</a>
-								{% if request.session.type_invoice == 1 %}
-									<a class="dropdown-item send_dian" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-paper-plane"></i></i> DIAN</a>
-								{% endif %}								
-								<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Eliminiar</a>
+								${
+									( 
+										content[i].state  !== "Procesado Correctamente" ? 
+										`{% if request.session.type_invoice == 1 %}
+											<a class="dropdown-item send_dian" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-paper-plane"></i></i> DIAN</a>
+										 {% endif %}
+										 <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Eliminiar</a>` : 
+										`<a class="dropdown-item view_pdf" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-file-24"></i></i> PDF</a>
+										 <a class="dropdown-item validated_invoice" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-checked text-success"></i></i> VALIDAR</a>
+										`
+									)
+								}
 
 							</div>
 						</div>
@@ -107,15 +68,73 @@
         	`)
         }
     })
+
+    function refresh_table(){
+    	$.get(url, function(data) {
+        var content = data;
+        $("#data_invoice").append(`
+        	<table class="exampletable table stripe hover nowrap">
+				<thead>
+					<tr>
+						<th class="table-plus datatable-nosort" style="width: 10%;">Numero</th>
+						<th style="width: 25%;">Cliente</th>
+						<th style="width: 7%;">Fecha</th>
+						<th style="width: 25%;">Estado</th>
+						<th style="width: 15%;">Total</th>
+						<th class="datatable-nosort" style="width: 10%;">Action</th>
+					</tr>
+				</thead>
+				<tbody class="father"></tbody>
+			</table>
+        `)
+        for(var i = 0; i < content.length; i++){
+        	$(".father").append(`
+        		<tr>
+					<td class="table-plus">${content[i].consecutive}</td>
+					<td>${content[i].client}</td>
+					<td>${content[i].date}</td>
+					<td><span id="state${content[i].consecutive}">${content[i].state}</span></td>
+					<td>${content[i].total}</td>
+					<td>
+						<div class="dropdown">
+							<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+								<i class="dw dw-more"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+								<a class="dropdown-item" href="http://localhost:8000/invoice_fe/View_Invoice/${content[i].consecutive}"><i class="dw dw-eye"></i> Ver</a>
+								${
+									( 
+										content[i].state  !== "Procesado Correctamente" ? 
+										`{% if request.session.type_invoice == 1 %}
+											<a class="dropdown-item send_dian" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-paper-plane"></i></i> DIAN</a>
+										 {% endif %}
+										 <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Eliminiar</a>` : 
+										`<a class="dropdown-item view_pdf" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-file-24"></i></i> PDF</a>
+										 <a class="dropdown-item validated_invoice" href="javascript:void(0);" id="${content[i].consecutive}"><i class="dw dw-checked text-success"></i></i> VALIDAR</a>
+										`
+									)
+								}
+
+							</div>
+						</div>
+					</td>
+				</tr>
+        	`)
+        }
+    })
+    }
+    
     $(document).ready(function() {
 		$(document).on('click','.send_dian',function(){
 			id = this.id
-			$("#state"+id).text("Enviando factura a la DIAN...")
+			$("#state"+id).text("Espere por favor...")
 			$.ajax({
 				url:"{% url 'Send_DIAN' %}",
 				data:{'consecutive':id},
 				success:function(data){
 					$("#state"+id).text(data)
+					// $("#data_invoice").empty()
+					// refresh_table()
 				}
 			})
 		})

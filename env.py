@@ -12,8 +12,11 @@ GET_LIST_INVENTORY = ENVIROMENT+"/inventory/GET_LIST_INVENTORY/"
 CREATE_INVOICE = ENVIROMENT+"/invoice_fe/CREATE_INVOICE/"
 GET_LIST_INVOICE = ENVIROMENT+"/invoice_fe/GET_LIST_INVOICE/"
 GET_LIST_EMPLOYEE = ENVIROMENT+"/employee/GET_LIST_EMPLOYEE/"
-SEND_DIAN = ENVIROMENT+"/employee/Send_DIAN/"
+# SEND_DIAN = ENVIROMENT+"/employee/Send_DIAN/"
+SEND_DIAN = ENVIROMENT+"/invoice_fe/Send_DIAN/"
 
 
 FILE_JSON_INVOICE_FE = "./static/data_fe.json"
 FILE_JSON_INVOICE_POS = "./static/data_pos.json"
+FILE_JSON_EARRING = "./static/earring.json"
+FILE_JSON_CLIENTS = "./static/clients.json"

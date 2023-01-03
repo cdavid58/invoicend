@@ -18,6 +18,25 @@ $('document').ready(function(){
 		}
 	});
 
+	$('.listclientable').DataTable({
+		scrollCollapse: true,
+		autoWidth: false,
+		responsive: true,
+		columnDefs: [{
+			targets: "datatable-nosort",
+			orderable: false,
+		}],
+		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+		"language": {
+			"info": "_START_-_END_ de _TOTAL_ Clientes",
+			searchPlaceholder: "Buscar cliente",
+			paginate: {
+				next: '<i class="ion-chevron-right"></i>',
+				previous: '<i class="ion-chevron-left"></i>'  
+			}
+		}
+	});
+
 	$('.data-table-export').DataTable({
 		scrollCollapse: true,
 		autoWidth: false,

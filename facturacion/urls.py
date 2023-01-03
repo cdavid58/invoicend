@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^home/', include('home.urls')),
     url(r'^invoice_fe/', include('fe.urls')),
     url(r'^invoice_pos/', include('pos.urls')),
+    url(r'^client/', include('client.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

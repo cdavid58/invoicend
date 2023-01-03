@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from query_client import Query_Client
 from query_inventory import Query_Inventory
 from query_invoice import Create_Invoice,Query_Invoice
-import json, threading, queue
+import json, threading, queue, env
 from date import Count_Days
 from datetime import date
 from from_number_to_letters import Thousands_Separator
@@ -80,7 +80,7 @@ def Save_Invoice(request):
 
 def GET_LIST_INVOICE(request):
 	request.session['type_invoice'] = 1
-	return render(request,'list_invoice/invoice.html',{'json':'data_fe.json'})
+	return render(request,'list_invoice/invoice.html',{'json':"http://localhost:8000/static/data_fe.json"})
 
 def View_Invoice(request,pk):
 	query = Query_Invoice()
@@ -122,14 +122,15 @@ def VALUES_TAXES(tax,data):
 def Send_DIAN(request):
 	if request.is_ajax:
 		consecutive = request.GET['consecutive']
-		u = threading.Thread(target=Send_Invoice,args=(consecutive,), name='Invoice')
+		u = threading.Thread(target=Send_Invoice,args=(request,consecutive,), name='Invoice')
 		u.start()
 		data = my_queue.get()
+		print(data,'respuesta')
 	return HttpResponse(data)
 
 @storeInQueue
-def Send_Invoice(consecutive):
-	ci = Create_Invoice('')
+def Send_Invoice(request,consecutive):
+	ci = Create_Invoice(request,'')
 	return ci.Send_Invoice_Dian(consecutive)
 	
 	

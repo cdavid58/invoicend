@@ -1,0 +1,125 @@
+{% extends '../base.html' %}
+{% block loading %}Agreguemos un cliente{% endblock %}
+{% block content %}
+<div class="alert_register_2"></div>
+<div class="alert alert-primary alert-dismissible fade show alert_register" hidden role="alert">
+	<strong>Cliente Registrado Exitosamente!.</strong>
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">×</span>
+	</button>
+</div>
+<div class="pd-20 card-box mb-30">
+	<div class="clearfix">
+		<div class="pull-left">
+			<h4 class="text-blue h4">Agregar Cliente</h4>
+			<!-- <p class="mb-30">All bootstrap element classies</p> -->
+		</div>
+	</div>
+	<form class="form_data_client">
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Documento</label>
+			<div class="col-sm-12 col-md-10">
+				<select name="type_document" class="custom-select col-12 document">
+					<option selected="">Cambiar...</option>
+					{% for i in Type_DocumentI %}
+						<option value="{{i.pk}}">{{i.name}}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Doc. de Iden. con DV</label>
+			<div class="col-sm-12 col-md-10">
+				<input name="docI" class="form-control" type="number" placeholder="9999999999-1">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Nombre</label>
+			<div class="col-sm-12 col-md-10">
+				<input name="name" class="form-control" type="text" placeholder="Johnny Brown">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Dirección</label>
+			<div class="col-sm-12 col-md-10">
+				<input name="address" class="form-control" placeholder="CRA 40 #57-154" type="text">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Email</label>
+			<div class="col-sm-12 col-md-10">
+				<input name="email" class="form-control" placeholder ="bootstrap@example.com" type="email">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Teléfono</label>
+			<div class="col-sm-12 col-md-10">
+				<input name="phone" class="form-control" placeholder ="301-570-0795" type="tel">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Organización</label>
+			<div class="col-sm-12 col-md-10">
+				<select name="organization" class="custom-select col-12">
+					<option selected="">Cambiar...</option>
+					{% for i in Type_Organizations %}
+						<option value="{{i.pk}}">{{i.name}}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Regimen</label>
+			<div class="col-sm-12 col-md-10">
+				<select name="regime" class="custom-select col-12">
+					<option selected="">Cambiar...</option>
+					{% for i in Type_Regimen %}
+						<option value="{{i.pk}}">{{i.name}}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Municipio</label>
+			<div class="col-sm-12 col-md-10">
+				<select name="municipality" class="custom-select col-12">
+					<option selected="">Cambiar...</option>
+					{% for i in Municipalitys %}
+						<option value="{{i.pk}}">{{i.name}}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<button type="button" class="btn btn-primary register_client">Registrar cliente</button>
+			<a type="button" href="{% url 'List_Client' %}" class="btn btn-primary register_client ml-auto">Lista de cliente</a>
+		</div>
+	</form>
+</div>
+
+
+{% endblock %}
+{% block script %}
+<script>
+	$(document).ready(function(){
+		$(".register_client").click(function(){
+			$('.alert_register').prop('hidden',false)
+			$('html, body').animate({
+			scrollTop: $(".alert_register_2").offset().top
+ 			}, 1000);
+			// $.ajax({
+			// 	url:"{% url 'CREATE_CLIENT' %}",
+			// 	data:$(".form_data_client").serialize(),
+			// 	success:function(data){
+			// 		if(data == "True"){
+			// 			$("form select").each(function() { this.selectedIndex = 0 });
+     		// 			$("form input[type=text]").each(function() { this.value = '' });
+     		// 			$("form input[type=number]").each(function() { this.value = '' });
+     		// 			$('.alert_register').attr('display','block')
+			// 		}
+			// 	}
+			// })
+		})
+	})
+</script>
+{% endblock %}

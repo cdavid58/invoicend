@@ -15,7 +15,7 @@ class Create_Invoice:
 		response = requests.request("POST", url, headers=headers, data=payload)
 		self.data = response.text
 		if self.request.session['type_invoice'] == 1:
-			self.Save_Record_JSON(env.c)		
+			self.Save_Record_JSON(env.FILE_JSON_INVOICE_FE)		
 		else:
 			self.Save_Record_JSON(env.FILE_JSON_INVOICE_POS)	
 		return True 
@@ -28,7 +28,7 @@ class Create_Invoice:
 			json.dump(data, file, indent=4)
 
 	def Send_Invoice_Dian(self,consecutive):
-		url = "http://localhost:9090/invoice_fe/Send_DIAN/"
+		url = env.SEND_DIAN
 		payload = json.dumps({
 		  "consecutive": consecutive
 		})
@@ -36,7 +36,7 @@ class Create_Invoice:
 		  'Content-Type': 'application/json'
 		}
 		response = requests.request("POST", url, headers=headers, data=payload)
-		with open(env.FILE_JSON_INVOICE) as file:
+		with open(env.FILE_JSON_INVOICE_FE) as file:
 			data = json.load(file)
 
 		result = json.loads(response.text)['Result']
@@ -44,10 +44,10 @@ class Create_Invoice:
 		for i in range(len(data)):
 			if int(data[i]['consecutive']) == int(consecutive):
 				data[i]['state'] = result
-		with open(env.FILE_JSON_INVOICE, 'w') as file:
+		with open(env.FILE_JSON_INVOICE_FE, 'w') as file:
 			json.dump([], file, indent=4)
 
-		with open(env.FILE_JSON_INVOICE, 'w') as file:
+		with open(env.FILE_JSON_INVOICE_FE, 'w') as file:
 			json.dump(data, file, indent=4)
 
 		return result
