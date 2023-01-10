@@ -14,11 +14,13 @@ class Create_Invoice:
 		}
 		response = requests.request("POST", url, headers=headers, data=payload)
 		self.data = response.text
-		if self.request.session['type_invoice'] == 1:
-			self.Save_Record_JSON(env.FILE_JSON_INVOICE_FE)		
-		else:
-			self.Save_Record_JSON(env.FILE_JSON_INVOICE_POS)	
-		return True 
+		if json.loads(self.data)['result']:
+			if self.request.session['type_invoice'] == 1:
+				self.Save_Record_JSON(env.FILE_JSON_INVOICE_FE)		
+			else:
+				self.Save_Record_JSON(env.FILE_JSON_INVOICE_POS)	
+			return True
+		return False
 
 	def Save_Record_JSON(self,file_information):
 		with open(file_information) as file:

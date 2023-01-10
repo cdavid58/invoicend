@@ -30,7 +30,7 @@
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Doc. de Iden. con DV</label>
 			<div class="col-sm-12 col-md-10">
-				<input name="docI" class="form-control" type="number" placeholder="9999999999-1">
+				<input name="docI" class="form-control docI" type="number" placeholder="9999999999-1">
 			</div>
 		</div>
 		<div class="form-group row">
@@ -103,22 +103,22 @@
 <script>
 	$(document).ready(function(){
 		$(".register_client").click(function(){
-			$('.alert_register').prop('hidden',false)
-			$('html, body').animate({
-			scrollTop: $(".alert_register_2").offset().top
- 			}, 1000);
-			// $.ajax({
-			// 	url:"{% url 'CREATE_CLIENT' %}",
-			// 	data:$(".form_data_client").serialize(),
-			// 	success:function(data){
-			// 		if(data == "True"){
-			// 			$("form select").each(function() { this.selectedIndex = 0 });
-     		// 			$("form input[type=text]").each(function() { this.value = '' });
-     		// 			$("form input[type=number]").each(function() { this.value = '' });
-     		// 			$('.alert_register').attr('display','block')
-			// 		}
-			// 	}
-			// })
+			$.ajax({
+				url:"{% url 'CREATE_CLIENT' %}",
+				data:$(".form_data_client").serialize(),
+				success:function(data){
+					if(data == "True"){
+						$("form select").each(function() { this.selectedIndex = 0 });
+     					$("form input[type=text]").each(function() { this.value = '' });
+     					$("form input[type=number]").each(function() { this.value = '' });
+     					$('.alert_register').prop('hidden',false)
+						$('html, body').animate({
+							scrollTop: $(".alert_register_2").offset().top
+			 			}, 1000);
+			 			$(".docI").focus()
+					}
+				}
+			})
 		})
 	})
 </script>

@@ -19,13 +19,20 @@ def storeInQueue(f):
 
 def Create_Invoice_FE(request):
 	request.session['type_invoice'] = 1
+	request.session['payment_form'] = 1
+	request.session['date_expired'] = str(date.today())
+	u = threading.Thread(target=Get_List_Invoice,args=(request,), name='Invoice')
+	u.start()
+	data = my_queue.get()
+	return render(request,'invoice/create_invoice.html',{'client':data[0],'type_invoice':'Electrónica','consecutive':data[1]})
+
+@storeInQueue
+def Get_List_Invoice(request):
 	qc = Query_Client()
 	query = qc.GET_LIST_CLIENT(request)
 	consecutive = qc.GET_CONSECUTIVE(request)
 	del qc
-	request.session['payment_form'] = 1
-	request.session['date_expired'] = str(date.today())
-	return render(request,'invoice/create_invoice.html',{'client':query,'type_invoice':'Electrónica','consecutive':consecutive})
+	return [query,consecutive]
 
 def GET_CLIENT(request):
 	if request.is_ajax():
@@ -125,8 +132,7 @@ def Send_DIAN(request):
 		u = threading.Thread(target=Send_Invoice,args=(request,consecutive,), name='Invoice')
 		u.start()
 		data = my_queue.get()
-		print(data,'respuesta')
-	return HttpResponse(data)
+		return HttpResponse(data)
 
 @storeInQueue
 def Send_Invoice(request,consecutive):

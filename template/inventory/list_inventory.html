@@ -1,5 +1,5 @@
 {% extends '../base.html' %}
-{% block loading %}Cargando Lista de Clientes{% endblock %}
+{% block loading %}Estamos cargando la lista de inventario{% endblock %}
 {% block content %}
 <div class="page-header">
 	<div class="row">
@@ -9,34 +9,30 @@
 			</div>
 		</div>
 		<div class="col-md-6 col-sm-12 text-right">
-			<a class="btn btn-primary add_client" href="#" role="button">
-				Agregar Cliente
+			<a class="btn btn-primary add_product" href="#" role="button">
+				Agregar Producto
 			</a>
 		</div>
 	</div>
 </div>
 <div class="card-box mb-30">
-	<div class="pd-20">
-		<h4 class="text-blue h4">Listado de clientes</h4>
-	</div>
-	<div class="pb-20" id="data_client">
-	</div>
+	<div class="pb-20" id="data_invoice"></div>
 </div>
 {% endblock %}
 {% block script %}
+
 <script>
 	url = '{{json}}'
 	$.get(url, function(data) {
         var content = data;
-        $("#data_client").append(`
-        	<table class="listclientable table stripe hover nowrap">
+        $("#data_invoice").append(`
+        	<table class="data-table-export table stripe hover nowrap">
 				<thead>
 					<tr>
-						<th class="table-plus datatable-nosort" style="width: 10%;">Doc. Ident</th>
-						<th style="width: 25%;">Nombre</th>
-						<th style="width: 25%;">Dirección</th>
-						<th style="width: 10%;">Teléfono</th>
-						<th style="width: 20%;">Email</th>
+						<th class="table-plus datatable-nosort" style="width: 10%;">Código</th>
+						<th style="width: 25%;">Producto</th>
+						<th style="width: 7%;">Cantidad</th>
+						<th style="width: 25%;">IVA</th>
 						<th class="datatable-nosort" style="width: 10%;">Action</th>
 					</tr>
 				</thead>
@@ -45,14 +41,13 @@
         `)
         for(var i = 0; i < content.length; i++){
         	$(".father").append(`
-        		<tr id="myRow${content[i]['pk']}">
-					<td>${content[i]['documentI']}</td>
-					<td>${content[i]['name']}</td>
-					<td>${content[i]['address']}</td>
-					<td>${content[i]['phone']}</td>
-					<td>${content[i]['email']}</td>
+        		<tr>
+					<td class="table-plus">${content[i].code}</td>
+					<td>${content[i].name}</td>
+					<td>${content[i].quanty}</td>
+					<td><span>${content[i].tax}</span></td>
 					<td>
-					<div class="dropdown">
+						<div class="dropdown">
 							<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 								<i class="dw dw-more"></i>
 							</a>
@@ -67,24 +62,11 @@
         }
     })
 
-
-	$(document).ready(function(){
-		$(".add_client").click(function(){
-			location.href = "{% url 'Add_Client' %}";
-		})
-		$(document).on('click','.delete_client',function(){
-			id = this.id
-			$.ajax({
-				url:"{% url 'DELETE_CLIENT' %}",
-				data:{'pk':id},
-				success:function(data) {
-					console.log(data)
-					$("#myRow"+id).remove()
-				}
-			})
-			
-		})
-	})
-
+    $(document).ready(function(){
+    	$(".add_product").click(function() {
+    		location.href = "{% url 'Add_Product' %}"
+    	})
+    })
 </script>
+
 {% endblock %}

@@ -14,11 +14,18 @@ def Login(request):
 		return HttpResponse(result)
 	return render(request,'login.html')
 
+def Add_Employee(request):
+	if request.is_ajax():
+		data = request.data
+
+		return HttpResponse(True)
+	return render(request,'inventory/add.html')
+
 
 def GET_LIST_EMPLOYEE(request):
 	url = "http://localhost:9090/employee/GET_LIST_EMPLOYEE/"
 	payload = json.dumps({
-	  "company": 3
+	  "company": request.session['company_pk']
 	})
 	headers = {
 	  'Content-Type': 'application/json'

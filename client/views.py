@@ -1,10 +1,28 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from query_client import Query_Client
-import requests,json
+import requests, json, env, threading, queue
+
+my_queue = queue.Queue()
+
+def storeInQueue(f):
+  def wrapper(*args):
+  	global my_queue
+  	my_queue.put(f(*args))
+  return wrapper
 
 def List_Client(request):
+	u = threading.Thread(target=GET_CLIENT_LIST,args=(request,), name='Invoice')
+	u.start()
 	return render(request,'client/list_client.html',{'json':"http://localhost:8000/static/clients.json"})
+
+@storeInQueue
+def GET_CLIENT_LIST(request):
+	list_client = Query_Client().GET_LIST_CLIENT(request)
+	with open(env.FILE_JSON_CLIENTS, 'w') as file:
+		json.dump(list_client, file, indent=4)
+	print(list_client)
+	del list_client
 
 def Add_Client(request):
 	return render(request,'client/add.html',{

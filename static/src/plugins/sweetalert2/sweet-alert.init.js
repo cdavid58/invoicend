@@ -43,6 +43,30 @@
             )
         });
 
+        $('#Error_Invoice').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Falta indicar el cliente o ingresar un articulo para la venta',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#Error_Sold_Out').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Se agotaron las facturas',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
 
 
 

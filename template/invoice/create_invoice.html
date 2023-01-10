@@ -150,13 +150,19 @@
 	</table>
 </div>
 
-
+<div class="pd-20 card-box mb-10">
+	<div class="row">
+		<button class="col-12 btn btn-primary send_invoice">FACTURAR</button>
+	</div>
+</div>
 
 
 <!-- ALERTS -->
 
 <button type="button" class="btn mb-20 btn-primary btn-block" hidden id="Add_not_quanty_invoice">Add_not_quanty_invoice</button>
 <button type="button" class="btn mb-20 btn-primary btn-block Product_DoesNotExist" hidden id="Product_DoesNotExist">Product_DoesNotExist</button>
+<button type="button" class="btn mb-20 btn-primary btn-block Error_Invoice" hidden id="Error_Invoice">Product_DoesNotExist</button>
+<button type="button" class="btn mb-20 btn-primary btn-block Error_Sold_Out" hidden id="Error_Sold_Out">Product_DoesNotExist</button>
 
 <!-- END ALERTS -->
 
@@ -309,15 +315,12 @@
 
 			}
 
-			$(".product").keyup(function(e) {
-				var code = (e.keyCode ? e.keyCode : e.which);
-				if(code == 80){
-					$(".product").click()
-				}
-				else if(code == 70){
-					SaveInvoice()
-				}
-			})
+			// $(".product").keyup(function(e) {
+			// 	var code = (e.keyCode ? e.keyCode : e.which);
+			// 	// if(code == 80){
+			// 	// 	$(".product").click()
+			// 	// }
+			// })
 			
 			$(".product").change(function(){
 
@@ -468,6 +471,15 @@
 				CalculateTotalsInvoice()
 			}
 
+			$(".send_invoice").click(function(){
+				if( $(".list_client").val() !== null && $('#father').tableToJSON().length >= 1){
+					SaveInvoice()
+				}
+				else{
+					$(".Error_Invoice").click()
+				}
+			})
+
 			function SaveInvoice(){
 				var table = $('#father').tableToJSON();
 				$.ajax({
@@ -476,6 +488,10 @@
 					success:function(data){
 						if(data == 'True'){
 							location.reload(true)
+						}
+						else
+						{
+							$(".Error_Sold_Out").click()	
 						}
 					}
 				})
