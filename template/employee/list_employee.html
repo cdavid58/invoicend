@@ -1,44 +1,135 @@
 {% extends '../base.html' %}
-{% load static %}
+{% block loading %}Estamos cargando la lista de empleados{% endblock %}
 {% block content %}
-
-<div class="min-height-200px">
-	<div class="container pd-0">
-		<div class="page-header">
-			<div class="row">
-				<div class="col-md-12 col-sm-12">
-					<div class="title">
-						<h4>Directorio de empleados</h4>
-					</div>
-				</div>
+{% if request.session.type_employee == 1 %}
+<div class="page-header">
+	<div class="row">
+		<div class="col-md-6 col-sm-12">
+			<div class="title">
+				<!-- <h4>Form</h4> -->
 			</div>
 		</div>
-		<div class="contact-directory-list">
-			<ul class="row">
-				{% for i in employee %}
-					<li class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-						<div class="contact-directory-box" style="min-height: 200px !important;">
-							<div class="contact-dire-info text-center">
-								<div class="contact-avatar">
-									<span>
-										<img src="{% static 'vendors/images/photo2.jpg' %}" alt="">
-									</span>
-								</div>
-								<div class="contact-name">
-									<h4>{{i.name}}</h4>
-									<div class=""><i class="icon-copy ion-at"></i>&nbsp;{{i.email}}</div>
-									<div class="work text-success"><i class="ion-ios-telephone"></i>&nbsp;{{i.phone}}</div>
-								</div>
-							</div>
-							<div class="view-contact">
-								<a href="{% url 'GET_EMPLOYEE' 1 %}">Ver Perfil</a>
-							</div>
-						</div>
-					</li>
-				{% endfor %}
-			</ul>
+		<div class="col-md-6 col-sm-12 text-right">
+			<a class="btn btn-primary add_employee" href="#" role="button">
+				Agregar Empleado
+			</a>
 		</div>
 	</div>
 </div>
+{% endif %}
+<div class="card-box mb-30">
+	<div class="pd-20">
+		<h4 class="text-blue h4"></h4>
+	</div>
+	<div class="pb-20">
+		<table class="listemployeetable table stripe hover nowrap">
+			<thead>
+				<tr>
+					<th class="table-plus datatable-nosort" style="width: 10%;">Doc. I</th>
+					<th style="width: 25%;">Nombre</th>
+					<th style="width: 7%;">Teléfono</th>
+					<th style="width: 25%;">Tipo de Empleado</th>
+					{% if request.session.type_employee == 1 %}<th class="datatable-nosort" style="width: 10%;">Action</th>{% endif %}
+				</tr>
+			</thead>
+			<tbody class="father"></tbody>
+		</table>
+	</div>
+</div>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="DELETED_EMPLOYEE_SUCCESS">Click me</button>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="DELETED_EMPLOYEE_READY">Click me</button>
+{% endblock %}
+{% block script %}
+
+<script>
+	url = '{{json}}'
+	$.get(url, function(data) {
+        var content = data;
+        console.log(content)
+        var type_employee = parseInt('{{request.session.type_employee}}')
+        for(var i = 0; i < content.length; i++){
+        	$(".father").append(`
+        		<tr id="myRow${content[i].pk}">
+					<td class="table-plus">${content[i].documentI}</td>
+					<td>${content[i].name}</td>
+					<td>${content[i].phone}</td>
+					<td>
+						<span>${(content[i].type_employee == 1) ? "Administrador" : "Cajero "}</span>
+					</td>
+					${
+						( type_employee == 1 )?
+						`<td>
+								<div class="dropdown">
+									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+										<i class="dw dw-more"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="http://localhost:8000/Edit/${content[i]['pk']}"><i class="dw dw-edit"></i> Editar</a>
+										<a class="dropdown-item delete_employee" id="${content[i].pk}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>
+									</div>
+								</div>
+						</td>`:""
+					}
+				</tr>
+        	`)
+        }
+    })
+
+    $(document).ready(function(){
+    	$(".add_employee").click(function() {
+    		location.href = "{% url 'CREATE_EMPLOYEE' %}"
+    	})
+
+    	$(document).on('click','.delete_employee',function(){
+    		id = this.id
+    		$.ajax({
+    			url:"{% url 'DELETE_EMPLOYEE' %}",
+    			data:{'pk':id},
+    			success:function(data){
+	    			if(data == "El empleado ya fue eliminado"){
+	    				$("#DELETED_EMPLOYEE_READY").click()
+	    			}
+	    			else{
+	    				$("#DELETED_EMPLOYEE_SUCCESS").click()
+	    				$("#myRow"+id).remove()
+	    				$(".father").empty()
+	    				$.get(url, function(data) {
+					        var content = data;
+					        console.log(content)
+					        var type_employee = parseInt('{{request.session.type_employee}}')
+					        for(var i = 0; i < content.length; i++){
+					        	$(".father").append(`
+					        		<tr id="myRow${content[i].pk}">
+										<td class="table-plus">${content[i].documentI}</td>
+										<td>${content[i].name}</td>
+										<td>${content[i].phone}</td>
+										<td>
+											<span>${(content[i].type_employee == 1) ? "Administrador" : "Cajero "}</span>
+										</td>
+										${
+											( type_employee == 1 )?
+											`<td>
+													<div class="dropdown">
+														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+															<i class="dw dw-more"></i>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+															<a class="dropdown-item" href="http://localhost:8000/Edit/${content[i]['pk']}"><i class="dw dw-edit"></i> Editar</a>
+															<a class="dropdown-item delete_employee" id="${content[i].pk}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>
+														</div>
+													</div>
+											</td>`:""
+										}
+									</tr>
+					        	`)
+					        }
+					    })
+	    			}
+	    		}
+    		})
+    	})
+
+    })
+</script>
 
 {% endblock %}

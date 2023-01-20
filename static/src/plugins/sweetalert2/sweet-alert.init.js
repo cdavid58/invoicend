@@ -67,6 +67,227 @@
             )
         });
 
+        $('#UPDATE_PRODUCT_ERROR').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Se agotaron las facturas',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        $('#UPDATE_PRODUCT').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El producto fue actualizado con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#UPDATE_EMPLOYEE').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El empleado fue actualizado con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#PRODUCT_SAVE_SUCCESS').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El producto se creo con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+        $('#PRODUCT_SAVE_ERROR').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El producto ya existe',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        // CLIENT
+        $('#UPDATED_CLIENT').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'Cliente actualizado con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        $('#SOLD_OUT').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'Los cupos de empleados estan agotados, puede comprar más cupos si quiere',
+                    timer: 3000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#REGISTERED_EMPLOYEE').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'El empleado ya esta registrado',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+        $('#REGISTERED_EMPLOYEE_SUCCESSS').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El empleado se registro con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#DELETED_EMPLOYEE_SUCCESS').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El empleado se elimino con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#DELETED_EMPLOYEE_READY').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'El empleado ya fue eliminado',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        $('#PRODUCT_DOESNOTEXIST').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'El producto que busca no éxite',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#QUANTY_DOESNOTEXIST').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'Tiene que agregar una cantidad distinta a cero',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#TAX_DOESNOTEXIST').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'El iva que indica no es valido',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#NUMBER_INVOICE_DOESNOTEXIST').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'Tiene que indicar el número de la factura de compra',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#NEGATIVE_FIRST_PRODUCT').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'No puede agregar una cantidad en negativo en su primera agregada',
+                    timer: 2500,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        $('#EXIST_SHOPPING').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'La factura ya fue ingresada al sistema, si continua la compra no sera registrada',
+                    timer: 2500,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        $('#SUCCESS_SHOPPING').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'La compra se registro con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
 
 
 

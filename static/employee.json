@@ -1,0 +1,18 @@
+[
+    {
+        "pk": 11,
+        "documentI": "158151676",
+        "name": "Carlos Del Aguila",
+        "phone": "3015700795",
+        "email": "carlos@gmail.com",
+        "type_employee": 1
+    },
+    {
+        "pk": 12,
+        "documentI": "10719222",
+        "name": "Carmen",
+        "phone": "3003363128",
+        "email": "carmen@gmail.com",
+        "type_employee": 2
+    }
+]

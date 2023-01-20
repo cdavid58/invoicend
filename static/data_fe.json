@@ -1,34 +1,11 @@
 [
     {
-        "pk": 1308,
-        "consecutive": 635,
-        "client": "theriosoft",
-        "total": 10.0,
-        "state": "Procesado Correctamente.",
-        "date": "2023-01-08"
-    },
-    {
-        "pk": 1307,
-        "consecutive": 634,
-        "client": "theriosoft",
-        "total": 10.0,
-        "state": "Documento procesado anteriormente.",
-        "date": "2023-01-08"
-    },
-    {
-        "pk": 1306,
-        "consecutive": 633,
-        "client": "theriosoft",
-        "total": 10.0,
-        "state": "Documento procesado anteriormente.",
-        "date": "2023-01-08"
-    },
-    {
-        "pk": 1305,
-        "consecutive": 632,
-        "client": "theriosoft",
-        "total": 10.0,
-        "state": "Documento procesado anteriormente.",
-        "date": "2023-01-08"
+        "pk": 1314,
+        "consecutive": 6,
+        "client": "adsasdasd",
+        "total": 840.34,
+        "state": "Sin enviar a la DIAN",
+        "date": "2023-01-18",
+        "cufe": null
     }
 ]

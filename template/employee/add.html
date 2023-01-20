@@ -6,14 +6,14 @@
 	<div class="clearfix">
 		<div class="pull-left">
 			<h4 class="text-blue h4">Agregar empleado</h4>
-			<!-- <p class="mb-30">All bootstrap element classies</p> -->
+			<p class="mb-30">Todos los campos son obligatorios</p>
 		</div>
 	</div>
 	<form class="form_data_client">
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Doc. de Iden</label>
 			<div class="col-sm-12 col-md-10">
-				<input name="docI" class="form-control docI" type="number" placeholder="9999999999-1">
+				<input name="docI" class="form-control docI" type="number" autofocus placeholder="9999999999">
 			</div>
 		</div>
 		<div class="form-group row">
@@ -49,7 +49,7 @@
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Empleado</label>
 			<div class="col-sm-12 col-md-10">
-				<select name="municipality" class="custom-select col-12">
+				<select name="type_employee" class="custom-select col-12">
 					<option selected="">Cambiar...</option>
 					<option value="1">Administrador</option>
 					<option value="2">Empleado</option>
@@ -57,10 +57,39 @@
 			</div>
 		</div>
 		<div class="row">
-			<button type="button" class="btn btn-primary register_client">Registrar cliente</button>
-			<a type="button" href="{% url 'List_Client' %}" class="btn btn-primary register_client ml-auto">Lista de cliente</a>
+			<button type="button" class="btn btn-primary register_client">Registrar empleado</button>
+			<a type="button" href="{% url 'GET_LIST_EMPLOYEE' %}" class="btn btn-primary ml-auto">Lista de cliente</a>
 		</div>
 	</form>
 </div>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="SOLD_OUT">Click me</button>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="REGISTERED_EMPLOYEE">Click me</button>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="REGISTERED_EMPLOYEE_SUCCESSS">Click me</button>
+{% endblock %}
+{% block script %}
+
+	<script>
+		$(document).ready(function(){
+			$(".register_client").click(function(){
+				$.ajax({
+					data:$(".form_data_client").serialize(),
+					success:function(data){
+						data = JSON.parse(data)
+						if(!data['Result']){
+							if(data['message'] == 'sold out'){
+								$("#SOLD_OUT").click()
+							}
+							else if(data['message'] == "already registered employee"){
+								$("#REGISTERED_EMPLOYEE").click()
+							}	
+						}
+						else{
+							$("#REGISTERED_EMPLOYEE_SUCCESSS").click()
+						}
+					}
+				})
+			})
+		})
+	</script>
 
 {% endblock %}

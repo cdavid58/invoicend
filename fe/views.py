@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from query_client import Query_Client
 from query_inventory import Query_Inventory
 from query_invoice import Create_Invoice,Query_Invoice
@@ -9,6 +9,7 @@ from datetime import date
 from from_number_to_letters import Thousands_Separator
 
 my_queue = queue.Queue()
+enviroments_json = env.ENVIROMENT_JSON
 
 def storeInQueue(f):
   def wrapper(*args):
@@ -16,28 +17,21 @@ def storeInQueue(f):
   	my_queue.put(f(*args))
   return wrapper
 
-
 def Create_Invoice_FE(request):
 	request.session['type_invoice'] = 1
 	request.session['payment_form'] = 1
 	request.session['date_expired'] = str(date.today())
-	u = threading.Thread(target=Get_List_Invoice,args=(request,), name='Invoice')
-	u.start()
-	data = my_queue.get()
-	return render(request,'invoice/create_invoice.html',{'client':data[0],'type_invoice':'Electrónica','consecutive':data[1]})
-
-@storeInQueue
-def Get_List_Invoice(request):
 	qc = Query_Client()
-	query = qc.GET_LIST_CLIENT(request)
 	consecutive = qc.GET_CONSECUTIVE(request)
 	del qc
-	return [query,consecutive]
+	return render(request,'invoice/create_invoice.html',{'type_invoice':'Electrónica','consecutive':consecutive})
 
 def GET_CLIENT(request):
 	if request.is_ajax():
 		qc = Query_Client()
-		query = qc.GET_CLIENT(request)
+		query = qc.GET_CLIENT(request.GET['pk'])
+		request.session['pk_client'] = request.GET['pk']
+		query = json.dumps(query)
 		del qc
 		return HttpResponse(query)
 
@@ -55,9 +49,7 @@ def Set_Payment_Form(request):
 
 def Date_Expired(request):
 	if request.is_ajax():
-		print('FECHA')
 		date = request.GET['date_expired'].split('-')[1].strip()
-		print(date)
 		request.session['date_expired'] = date
 		return HttpResponse(True)		
 
@@ -83,11 +75,18 @@ def Save_Invoice(request):
 		c = Create_Invoice(request,_data)
 	return HttpResponse(c.Send_Invoice())
 
-
-
 def GET_LIST_INVOICE(request):
+	from query_invoice import Query_Invoice
+	query = Query_Invoice()
 	request.session['type_invoice'] = 1
-	return render(request,'list_invoice/invoice.html',{'json':"http://localhost:8000/static/data_fe.json"})
+	list_invoice_fe = query.GET_LIST_INVOICE(request,1)
+	with open(env.FILE_JSON_INVOICE_FE, 'w') as file:
+		json.dump(list_invoice_fe, file, indent=4)
+	if request.is_ajax():
+		with open(env.FILE_JSON_INVOICE_FE) as file:
+			data = json.load(file)
+		return HttpResponse(data)
+	return render(request,'list_invoice/invoice.html',{'json':enviroments_json + "/static/data_fe.json"})
 
 def View_Invoice(request,pk):
 	query = Query_Invoice()
@@ -112,8 +111,8 @@ def View_Invoice(request,pk):
 	if request.session['type_invoice'] == 2:
 		type_invoice = "POS"
 
-	return render(request,'list_invoice/view_invoice.html',{'details_product':details_product,'total':Thousands_Separator(total), 
-		'subtotal_invoice':Thousands_Separator(subtotal_invoice),'tax_invoice':Thousands_Separator(tax_invoice), 'iva19':VALUES_TAXES(19,details_product),
+	return render(request,'list_invoice/view_invoice.html',{'details_product':details_product,'total':Thousands_Separator(round(total,2)), 
+		'subtotal_invoice':Thousands_Separator(round(subtotal_invoice,2)),'tax_invoice':Thousands_Separator(round(tax_invoice,2)), 'iva19':VALUES_TAXES(19,details_product),
 		'iva5':VALUES_TAXES(5,details_product), 'iva0':VALUES_TAXES(0,details_product), 'client':client, 'information':informations, 'days_expired':days,'type_invoice':type_invoice})
 
 def VALUES_TAXES(tax,data):
@@ -140,5 +139,13 @@ def Send_Invoice(request,consecutive):
 	return ci.Send_Invoice_Dian(consecutive)
 	
 	
+def Get_PDF_Platform(request,consecutive):
+	if validated(request):
+		prefix = "FFET"
+		try:
+			return FileResponse(open(env.URL_PDF_PLATFORM+str(request.session['company_pk'])+'/FES-'+str(prefix)+str(consecutive)+'.pdf','rb'),content_type='application/pdf')
+		except Exception as e:
+			return FileResponse(open(env.URL_PDF_PLATFORM+str(request.session['company_pk'])+'/FES-'+str(prefix)+str(consecutive)+'.pdf','rb'),content_type='application/pdf')
+	return redirect('/error403')
 
 

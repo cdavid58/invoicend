@@ -29,6 +29,9 @@ def Create_Invoice_POS(request):
 
 def GET_LIST_INVOICE_POS(request):
 	request.session['type_invoice'] = 2
+	list_invoice_pos = query.GET_LIST_INVOICE(request,2)
+	with open(env.FILE_JSON_INVOICE_POS, 'w') as file:
+		json.dump(list_invoice_pos, file, indent=4)
 	return render(request,'list_invoice/invoice.html',{'json':'data_pos.json'})
 
 

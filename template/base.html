@@ -1,4 +1,5 @@
 {% load static %}
+{% spaceless %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,9 +8,9 @@
 	<title>Sistema Administrativo</title>
 
 	<!-- Site favicon -->
-	<!-- <link rel="apple-touch-icon" sizes="180x180" href="{% static 'letra.ico' %}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'letra.ico' %}">
-	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'letra.ico' %}"> -->
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon.ico' %}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon.ico' %}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon.ico' %}">
 
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -35,6 +36,8 @@
 		input[type=number] { -moz-appearance:textfield; }
 	</style>
 
+	{% block style %}{% endblock %}
+
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
 	<script>
@@ -47,7 +50,7 @@
 <body>
 	<div class="pre-loader">
 		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="{% static 'vendors/images/deskapp-logo.svg' %}" alt=""></div>
+			<div class="loader-logo"><img src="{% static 'logos_menu/logo.png' %}" alt=""></div>
 			<div class='loader-progress' id="progress_div">
 				<div class='bar' id='bar1'></div>
 			</div>
@@ -113,7 +116,7 @@
 						<i class="icon-copy dw dw-notification"></i>
 						<span class="badge notification-active"></span>
 					</a>
-					<div class="dropdown-menu dropdown-menu-right">
+					<!-- <div class="dropdown-menu dropdown-menu-right">
 						<div class="notification-list mx-h-350 customscroll">
 							<ul>
 								<li>
@@ -160,22 +163,19 @@
 								</li>
 							</ul>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="https://www.pikpng.com/pngl/m/80-805068_my-profile-icon-blank-profile-picture-circle-clipart.png" style="width: 150% !important; height: 100% !important;" alt="">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name">{{request.session.name_user|title}}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
-						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="{% url 'LogOut' %}"><i class="dw dw-logout"></i> Salir</a>
 					</div>
 				</div>
 			</div>
@@ -310,3 +310,4 @@
 	{% block script %}{% endblock %}
 </body>
 </html>
+{% endspaceless %}

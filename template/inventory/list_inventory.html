@@ -1,22 +1,42 @@
 {% extends '../base.html' %}
 {% block loading %}Estamos cargando la lista de inventario{% endblock %}
 {% block content %}
-<div class="page-header">
-	<div class="row">
-		<div class="col-md-6 col-sm-12">
-			<div class="title">
-				<!-- <h4>Form</h4> -->
+{% if request.session.type_employee == 1 %}
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<div class="title">
+					<h4>Lista de inventario</h4>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12 text-right">
+				<a class="btn btn-primary add_product" href="#" role="button">
+					Agregar Producto
+				</a>
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-12 text-right">
-			<a class="btn btn-primary add_product" href="#" role="button">
-				Agregar Producto
-			</a>
-		</div>
 	</div>
-</div>
+{% endif %}
 <div class="card-box mb-30">
-	<div class="pb-20" id="data_invoice"></div>
+	<div class="pd-20">
+		<h4 class="text-blue h4"></h4>
+	</div>
+	<div class="pb-20">
+		<table class="{% if request.session.type_employee == 1 %} data-table-export {% else %} exampletable {% endif %} table stripe hover nowrap">
+			<thead>
+				<tr>
+					<th class="table-plus datatable-nosort" style="width: 10%;">Código</th>
+					<th style="width: 25%;">Producto</th>
+					<th style="width: 7%;">Cantidad</th>
+					<th style="width: 25%;">IVA</th>
+					{% if request.session.type_employee == 1 %}
+						<th class="datatable-nosort" style="width: 10%;">Action</th>
+					{% endif %}
+				</tr>
+			</thead>
+			<tbody class="father"></tbody>
+		</table>
+	</div>
 </div>
 {% endblock %}
 {% block script %}
@@ -25,38 +45,28 @@
 	url = '{{json}}'
 	$.get(url, function(data) {
         var content = data;
-        $("#data_invoice").append(`
-        	<table class="data-table-export table stripe hover nowrap">
-				<thead>
-					<tr>
-						<th class="table-plus datatable-nosort" style="width: 10%;">Código</th>
-						<th style="width: 25%;">Producto</th>
-						<th style="width: 7%;">Cantidad</th>
-						<th style="width: 25%;">IVA</th>
-						<th class="datatable-nosort" style="width: 10%;">Action</th>
-					</tr>
-				</thead>
-				<tbody class="father"></tbody>
-			</table>
-        `)
+        var type_employee = parseInt('{{request.session.type_employee}}')
         for(var i = 0; i < content.length; i++){
         	$(".father").append(`
-        		<tr>
+        		<tr id="myRow${content[i].code}">
 					<td class="table-plus">${content[i].code}</td>
 					<td>${content[i].name}</td>
 					<td>${content[i].quanty}</td>
 					<td><span>${content[i].tax}</span></td>
-					<td>
-						<div class="dropdown">
-							<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-								<i class="dw dw-more"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-								<a class="dropdown-item" href="{% url 'Add_Client' %}"><i class="dw dw-edit"></i> Editar</a>
-								<a class="dropdown-item delete_client" id="${content[i]['pk']}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>
+					${(type_employee == 1) ? 
+						`<td>
+							<div class="dropdown">
+								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+									<i class="dw dw-more"></i>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+									<a class="dropdown-item" href="http://localhost:8000/inventory/Edit_Product/${content[i]['pk']}"><i class="dw dw-edit"></i> Editar</a>
+									<a class="dropdown-item delete_product" id="${content[i]['code']}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>
+								</div>
 							</div>
-						</div>
-					</td>
+						</td>
+						`:''
+					}
 				</tr>
         	`)
         }
@@ -66,6 +76,20 @@
     	$(".add_product").click(function() {
     		location.href = "{% url 'Add_Product' %}"
     	})
+
+    	$(document).on('click','.delete_product',function(){
+    		id = this.id
+    		$.ajax({
+    			url:"{% url 'DELETE_PRODUCT' %}",
+    			data:{'code':id},
+    			success:function(data){
+	    			if(data == "True"){
+	    				location.reload(true)
+	    			}
+	    		}
+    		})
+    	})
+
     })
 </script>
 

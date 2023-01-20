@@ -5,7 +5,7 @@
 	<div class="row">
 		<div class="col-md-6 col-sm-12">
 			<div class="title">
-				<!-- <h4>Form</h4> -->
+				<h4>Listado de clientes</h4>
 			</div>
 		</div>
 		<div class="col-md-6 col-sm-12 text-right">
@@ -17,9 +17,24 @@
 </div>
 <div class="card-box mb-30">
 	<div class="pd-20">
-		<h4 class="text-blue h4">Listado de clientes</h4>
+		<h4 class="text-blue h4">
+			
+		</h4>
 	</div>
-	<div class="pb-20" id="data_client">
+	<div class="pb-20">
+		<table class="listclientable table stripe hover nowrap">
+			<thead>
+				<tr>
+					<th class="table-plus datatable-nosort" style="width: 10%;">Doc. Ident</th>
+					<th style="width: 25%;">Nombre</th>
+					<th style="width: 25%;">Dirección</th>
+					<th style="width: 10%;">Teléfono</th>
+					<th style="width: 20%;">Email</th>
+					<th class="datatable-nosort" style="width: 10%;">Action</th>
+				</tr>
+			</thead>
+			<tbody class="father"></tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}
@@ -27,38 +42,27 @@
 <script>
 	url = '{{json}}'
 	$.get(url, function(data) {
-        var content = data;
-        $("#data_client").append(`
-        	<table class="listclientable table stripe hover nowrap">
-				<thead>
-					<tr>
-						<th class="table-plus datatable-nosort" style="width: 10%;">Doc. Ident</th>
-						<th style="width: 25%;">Nombre</th>
-						<th style="width: 25%;">Dirección</th>
-						<th style="width: 10%;">Teléfono</th>
-						<th style="width: 20%;">Email</th>
-						<th class="datatable-nosort" style="width: 10%;">Action</th>
-					</tr>
-				</thead>
-				<tbody class="father"></tbody>
-			</table>
-        `)
-        for(var i = 0; i < content.length; i++){
+		console.log(data)
+        type_employee = "{{request.session.type_employee}}"
+        for(var i = 0; i < data.length; i++){
         	$(".father").append(`
-        		<tr id="myRow${content[i]['pk']}">
-					<td>${content[i]['documentI']}</td>
-					<td>${content[i]['name']}</td>
-					<td>${content[i]['address']}</td>
-					<td>${content[i]['phone']}</td>
-					<td>${content[i]['email']}</td>
+        		<tr id="myRow${data[i]['pk']}">
+					<td>${data[i]['documentI']}</td>
+					<td>${data[i]['name']}</td>
+					<td>${data[i]['address']}</td>
+					<td>${data[i]['phone']}</td>
+					<td>${data[i]['email']}</td>
 					<td>
 					<div class="dropdown">
 							<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 								<i class="dw dw-more"></i>
 							</a>
 							<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-								<a class="dropdown-item" href="{% url 'Add_Client' %}"><i class="dw dw-edit"></i> Editar</a>
-								<a class="dropdown-item delete_client" id="${content[i]['pk']}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>
+								<a class="dropdown-item" href="http://localhost:8000/client/Edit_Client/${data[i]['pk']}"><i class="dw dw-edit"></i> Editar</a>
+								${
+									(type_employee == 1) ?
+									`<a class="dropdown-item delete_client" id="${data[i]['pk']}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>`:""
+								}
 							</div>
 						</div>
 					</td>

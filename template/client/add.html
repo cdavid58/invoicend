@@ -17,20 +17,16 @@
 	</div>
 	<form class="form_data_client">
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Documento</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Documento*</label>
 			<div class="col-sm-12 col-md-10">
 				<select name="type_document" class="custom-select col-12 document">
-					<option selected="">Cambiar...</option>
-					{% for i in Type_DocumentI %}
-						<option value="{{i.pk}}">{{i.name}}</option>
-					{% endfor %}
 				</select>
 			</div>
 		</div>
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Doc. de Iden. con DV</label>
 			<div class="col-sm-12 col-md-10">
-				<input name="docI" class="form-control docI" type="number" placeholder="9999999999-1">
+				<input name="docI" class="form-control docI" type="text" placeholder="9999999999-1">
 			</div>
 		</div>
 		<div class="form-group row">
@@ -58,35 +54,23 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Organización</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Organización *</label>
 			<div class="col-sm-12 col-md-10">
-				<select name="organization" class="custom-select col-12">
-					<option selected="">Cambiar...</option>
-					{% for i in Type_Organizations %}
-						<option value="{{i.pk}}">{{i.name}}</option>
-					{% endfor %}
+				<select name="organization" class="custom-select col-12 organization">
 				</select>
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Regimen</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Regimen *</label>
 			<div class="col-sm-12 col-md-10">
-				<select name="regime" class="custom-select col-12">
-					<option selected="">Cambiar...</option>
-					{% for i in Type_Regimen %}
-						<option value="{{i.pk}}">{{i.name}}</option>
-					{% endfor %}
+				<select name="regime" class="custom-select col-12 regime">
 				</select>
 			</div>
 		</div>
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Tipo de Municipio</label>
 			<div class="col-sm-12 col-md-10">
-				<select name="municipality" class="custom-select col-12">
-					<option selected="">Cambiar...</option>
-					{% for i in Municipalitys %}
-						<option value="{{i.pk}}">{{i.name}}</option>
-					{% endfor %}
+				<select name="municipality" class="custom-select col-12 municipality">
 				</select>
 			</div>
 		</div>
@@ -101,7 +85,24 @@
 {% endblock %}
 {% block script %}
 <script>
+
+	function GetData(class_container,url){
+		$.get(url, function(data) {
+	        var content = data;
+	        for(var i = 0; i < content.length; i++){
+	        	$("."+class_container).append(`
+	        		<option value="${content[i]['pk']}">${content[i]['name']}</option>
+	        	`)
+	        }
+	    })
+	}
 	$(document).ready(function(){
+
+		GetData("document","http://localhost:8000/static/type_documentI.json")
+		GetData("organization","http://localhost:8000/static/type_organizations.json")
+		GetData("regime","http://localhost:8000/static/type_regimen.json")
+		GetData("municipality","http://localhost:8000/static/municipalitys.json")
+
 		$(".register_client").click(function(){
 			$.ajax({
 				url:"{% url 'CREATE_CLIENT' %}",

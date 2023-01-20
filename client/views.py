@@ -4,6 +4,7 @@ from query_client import Query_Client
 import requests, json, env, threading, queue
 
 my_queue = queue.Queue()
+enviroments_json = env.ENVIROMENT_JSON
 
 def storeInQueue(f):
   def wrapper(*args):
@@ -12,67 +13,91 @@ def storeInQueue(f):
   return wrapper
 
 def List_Client(request):
-	u = threading.Thread(target=GET_CLIENT_LIST,args=(request,), name='Invoice')
-	u.start()
-	return render(request,'client/list_client.html',{'json':"http://localhost:8000/static/clients.json"})
+	GET_CLIENT_LIST(request)
+	return render(request,'client/list_client.html',{'json':enviroments_json + "/static/clients.json"})
 
-@storeInQueue
 def GET_CLIENT_LIST(request):
 	list_client = Query_Client().GET_LIST_CLIENT(request)
 	with open(env.FILE_JSON_CLIENTS, 'w') as file:
 		json.dump(list_client, file, indent=4)
-	print(list_client)
 	del list_client
 
 def Add_Client(request):
-	return render(request,'client/add.html',{
-		'Type_DocumentI':Type_DocumentI(),
-		'Type_Organizations':Type_Organizations(),
-		'Type_Regimen':Type_Regimen(),
-		'Municipalitys':Municipalitys()
-	})
+	return render(request,'client/add.html')
 
 def CREATE_CLIENT(request):
 	if request.is_ajax():
 		data = request.GET
 		query = Query_Client().CREATE_CLIENT(request,data)
+		GET_CLIENT_LIST(request)
 	return HttpResponse(True)
 
 def DELETE_CLIENT(request):
 	if request.is_ajax():
 		if Query_Client().DELETE_CLIENT(request.GET):
-			list_invoice = Query_Client().GET_LIST_CLIENT(request)
-			with open(env.FILE_JSON_CLIENTS, 'w') as file:
-				json.dump(list_invoice, file, indent=4)
+			GET_CLIENT_LIST(request)
 		return HttpResponse(True)
 
+# def Type_DocumentI():
+# 	url = env.TYPE_DOCUMENTI
+# 	payload = json.dumps({})
+# 	headers = {'Content-Type': 'application/json'}
+# 	response = requests.request("POST", url, headers=headers, data=payload)
+# 	return json.loads(response.text)
+
+# def Type_Organizations():
+# 	url = env.TYPE_ORGANIZATIONS
+# 	payload = json.dumps({})
+# 	headers = {'Content-Type': 'application/json'}
+# 	response = requests.request("POST", url, headers=headers, data=payload)
+# 	return json.loads(response.text)
+
+# def Type_Regimen():
+# 	url = env.TYPE_REGIMEN
+# 	payload = json.dumps({})
+# 	headers = {'Content-Type': 'application/json'}
+# 	response = requests.request("POST", url, headers=headers, data=payload)
+# 	return json.loads(response.text)
+
+# def Municipalitys():
+# 	url = env.MUNICIPALITYS
+# 	payload = json.dumps({})
+# 	headers = {'Content-Type': 'application/json'}
+# 	response = requests.request("POST", url, headers=headers, data=payload)
+# 	return json.loads(response.text)
 
 
-def Type_DocumentI():
-	url = "http://localhost:9090/settings/Type_DocumentI/"
-	payload = json.dumps({})
-	headers = {'Content-Type': 'application/json'}
-	response = requests.request("POST", url, headers=headers, data=payload)
-	return json.loads(response.text)
+def Edit_Client(request,pk):
+	qc = Query_Client().GET_CLIENT(pk)
+	request.session['pk_client'] = pk
+	return render(request,'client/edit.html',{'c':qc})
 
-def Type_Organizations():
-	url = "http://localhost:9090/settings/Type_Organizations/"
-	payload = json.dumps({})
-	headers = {'Content-Type': 'application/json'}
-	response = requests.request("POST", url, headers=headers, data=payload)
-	return json.loads(response.text)
+def EDIT_CLIENT(request):
+	data = request.GET
+	identification_number = data['identification_number'].split('-')
+	_data = {
+		"pk":request.session['pk_client'],
+    "identification_number":identification_number[0],
+    "dv":identification_number[1],
+    "name":data['name'],
+    "phone":data['phone'],
+    "address":data['address'],
+    "email":data['email'],
+    "merchant_registration":None,
+    "type_documentI":data['type_documentI'],
+    "type_organization":data['type_organization'],
+    "type_regime":data['type_regime'],
+    "municipality":data['municipality'],
+    "type_client":data['type_client']
+	}
+	print(_data)
+	qc = Query_Client().EDIT_CLIENT(_data)
+	if qc:
+		list_client = Query_Client().GET_LIST_CLIENT(request)
+		with open(env.FILE_JSON_CLIENTS, 'w') as file:
+			json.dump(list_client, file, indent=4)
+		del list_client
+	return HttpResponse(qc)
 
-def Type_Regimen():
-	url = "http://localhost:9090/settings/Type_Regimen/"
-	payload = json.dumps({})
-	headers = {'Content-Type': 'application/json'}
-	response = requests.request("POST", url, headers=headers, data=payload)
-	return json.loads(response.text)
 
-def Municipalitys():
-	url = "http://localhost:9090/settings/Municipalitys/"
-	payload = json.dumps({})
-	headers = {'Content-Type': 'application/json'}
-	response = requests.request("POST", url, headers=headers, data=payload)
-	return json.loads(response.text)
 

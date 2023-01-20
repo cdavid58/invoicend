@@ -51,22 +51,22 @@
 									{{i.quanty}}
 								</td>
 								<td>
-									{{i.price_base}}
+									{{i.price_base|floatformat:2}}
 								</td>
 								<td>
 									{{i.tax}}
 								</td>
 								<td>
-									{{i.val_tax}}
+									{{i.val_tax|floatformat:2}}
 								</td>
 								<td>
 									{{i.discount}}
 								</td>
 								<td>
-									{{i.discount_product}}
+									{{i.discount_product|floatformat:2}}
 								</td>
 								<td>
-									{{i.subtotal}}
+									{{i.subtotal|floatformat:2}}
 								</td>
 							</tr>
 						{% endfor %}
@@ -89,20 +89,20 @@
 							<tr>
 								<td>IVA</td>
 								<td>19%</td>
-								<td style="text-align: right;">$ {{iva19.19}}</td>
-								<td style="text-align: right;">$ {{iva19.base}}</td>
+								<td style="text-align: right;">$ {{iva19.19|floatformat:2}}</td>
+								<td style="text-align: right;">$ {{iva19.base|floatformat:2}}</td>
 							</tr>
 							<tr>
 								<td>IVA</td>
 								<td>5%</td>
-								<td style="text-align: right;">$ {{iva5.5}}</td>
-								<td style="text-align: right;">$ {{iva5.base}}</td>
+								<td style="text-align: right;">$ {{iva5.5|floatformat:2}}</td>
+								<td style="text-align: right;">$ {{iva5.base|floatformat:2}}</td>
 							</tr>
 							<tr>
 								<td>IVA</td>
 								<td>0%</td>
-								<td style="text-align: right;">$ {{iva0.0}}</td>
-								<td style="text-align: right;">$ {{iva0.base}}</td>
+								<td style="text-align: right;">$ {{iva0.0|floatformat:2}}</td>
+								<td style="text-align: right;">$ {{iva0.base|floatformat:2}}</td>
 							</tr>
 						</tbody>
 					</table>

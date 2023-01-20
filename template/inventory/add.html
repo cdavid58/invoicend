@@ -14,9 +14,9 @@
 		<div class="pull-left">
 			<h4 class="text-blue h4">Agregar Producto</h4>
 		</div>
-		<div class="pull-right">
+		<!-- <div class="pull-right">
 			<button type="button" data-toggle="modal" data-target="#Medium-modal" class="btn btn-primary">Registrar Proveedor</button>
-		</div>
+		</div> -->
 	</div>
 	<form class="form_data_product">
 		<br>
@@ -35,13 +35,13 @@
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Cantidad</label>
 			<div class="col-sm-12 col-md-10">
-				<input name="quanty" class="form-control" value="0" type="number">
+				<input name="quanty" class="form-control text-right" value="0" type="number">
 			</div>
 		</div>
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">IVA</label>
 			<div class="col-sm-12 col-md-10">
-				<input name="tax" class="form-control" value="0" type="number">
+				<input name="tax" class="form-control text-right" value="0" type="number">
 			</div>
 		</div>
 
@@ -49,37 +49,37 @@
 			<div class="col-md-2 col-sm-12">
 				<div class="form-group">
 					<label>Costo</label>
-					<input type="text" name="cost" value="0" class="form-control text-right">
+					<input type="number" name="cost" value="0" class="form-control text-right">
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12">
 				<div class="form-group">
 					<label>Precio 1</label>
-					<input type="text" name="price_1" value="0" class="form-control text-right">
+					<input type="number" name="price_1" value="0" class="form-control text-right">
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12">
 				<div class="form-group">
 					<label>Precio 2</label>
-					<input type="text" name="price_2" value="0" class="form-control text-right">
+					<input type="number" name="price_2" value="0" class="form-control text-right">
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12">
 				<div class="form-group">
 					<label>Precio 3</label>
-					<input type="text" name="price_3" value="0" class="form-control text-right">
+					<input type="number" name="price_3" value="0" class="form-control text-right">
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12">
 				<div class="form-group">
 					<label>Precio 4</label>
-					<input type="text" name="price_4" value="0" class="form-control text-right">
+					<input type="number" name="price_4" value="0" class="form-control text-right">
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12">
 				<div class="form-group">
 					<label>Precio 5</label>
-					<input type="text" name="price_5" value="0" class="form-control text-right">
+					<input type="number" name="price_5" value="0" class="form-control text-right">
 				</div>
 			</div>
 		</div>
@@ -152,18 +152,42 @@
 	</div>
 </div>
 
-
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="PRODUCT_SAVE_SUCCESS"></button>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="PRODUCT_SAVE_ERROR"></button>
 {% endblock %}
 {% block script %}
 
 <script>
+	function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function time_sleep() {
+        for (let i = 0; i < 2; i++) {
+            console.log(`Waiting ${i} seconds...`);
+            await sleep(i * 1000);
+        }
+        $("form input[type=text]").each(function() { this.value = '' });
+		$("form input[type=number]").each(function() { this.value = '0' });
+		$('html, body').animate({
+			scrollTop: $(".alert_register_2").offset().top
+		}, 1000);
+		$(".docI").focus()
+    }
 	$(document).ready(function() {
 		$(".register_product").click(function(){
 			$.ajax({
 				url:"{% url 'Save_Product' %}",
 				data:$(".form_data_product").serialize(),
 				success:function(data){
-					
+					if(data == "True"){
+						$("#PRODUCT_SAVE_SUCCESS").click()
+						time_sleep()
+     					
+					}					
+					else{
+						$("#PRODUCT_SAVE_ERROR").click()
+					}
 				}
 			})
 		})
