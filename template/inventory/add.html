@@ -176,6 +176,7 @@
     }
 	$(document).ready(function() {
 		$(".register_product").click(function(){
+			$("#REGISTRAMOSCLIENTE").click()
 			$.ajax({
 				url:"{% url 'Save_Product' %}",
 				data:$(".form_data_product").serialize(),

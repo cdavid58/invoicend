@@ -288,6 +288,54 @@
             )
         });
 
+        $('#ERROR_DOCUMENT_LENGTH').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'El documento debe tener 9 o 12 caracteres junto al digito de verificación',
+                    timer: 2200,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#CLIENT_SUCCES').click(function () {
+            swal(
+                {
+                    type: 'success',
+                    title: 'Éxito',
+                    text: 'El cliente fue registrado con éxito',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+
+        $('#REGISTRAMOSCLIENTE').click(function () {
+            swal(
+                {
+                    type: 'info',
+                    title: 'Información',
+                    text: 'Enviando datos',
+                    timer: 1500,
+                    showConfirmButton:false
+                }
+            )
+        });
+
+        $('#CLIENTEXIST').click(function () {
+            swal(
+                {
+                    type: 'error',
+                    title: 'Oops',
+                    text: 'El cliente ya existe',
+                    timer: 2000,
+                    showConfirmButton:false
+                }
+            )
+        });
 
 
 

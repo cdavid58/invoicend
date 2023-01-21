@@ -353,8 +353,9 @@
 		})
 
 		t = $('#table_shopping_example').DataTable({
+			destroy:true,
 			scrollCollapse: true,
-			autoWidth: true,
+			autoWidth: false,
 			responsive: true,
 			columnDefs: [{
 				targets: "datatable-nosort",

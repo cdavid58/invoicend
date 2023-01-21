@@ -17,7 +17,6 @@ def Index(request):
 	request.session['work_start'] = time.time()
 	u = threading.Thread(target=Generated_File,args=(request,), name='Invoice')
 	u.start()
-	
 	return render(request,'index.html')
 
 @storeInQueue

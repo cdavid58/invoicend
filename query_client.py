@@ -80,6 +80,6 @@ class Query_Client:
 		payload = json.dumps(data)
 		headers = {'Content-Type': 'application/json'}
 		response = requests.request("POST", url, headers=headers, data=payload)
-		return json.loads(response.text)['result']['result']
+		return json.loads(response.text)['Result']
 
 

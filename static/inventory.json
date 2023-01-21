@@ -1,28 +1,28 @@
 [
     {
-        "pk": 4548,
-        "code": "002",
-        "name": "caja de zapato",
-        "quanty": 28,
+        "pk": 4551,
+        "code": "123",
+        "name": "zapatos addidas",
+        "quanty": 10,
         "tax": 0,
-        "cost": 0.0,
-        "price_1": 0.0,
+        "cost": 10.0,
+        "price_1": 100.0,
         "price_2": 0.0,
         "price_3": 0.0,
         "price_4": 0.0,
         "price_5": 0.0
     },
     {
-        "pk": 4549,
-        "code": "003",
-        "name": "teclado lenovo",
-        "quanty": 26,
-        "tax": 19,
+        "pk": 4552,
+        "code": "12345678987654321",
+        "name": "laptop gamer ryzen",
+        "quanty": 5,
+        "tax": 0,
         "cost": 100.0,
-        "price_1": 1000.0,
-        "price_2": 800.0,
-        "price_3": 600.0,
-        "price_4": 400.0,
-        "price_5": 200.0
+        "price_1": 2000.0,
+        "price_2": 0.0,
+        "price_3": 0.0,
+        "price_4": 0.0,
+        "price_5": 0.0
     }
 ]

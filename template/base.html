@@ -170,7 +170,7 @@
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="https://www.pikpng.com/pngl/m/80-805068_my-profile-icon-blank-profile-picture-circle-clipart.png" style="width: 150% !important; height: 100% !important;" alt="">
+							<img src="{% static 'logos_menu/profile.png' %}" alt="">
 						</span>
 						<span class="user-name">{{request.session.name_user|title}}</span>
 					</a>
@@ -271,6 +271,7 @@
 			</div>
 		</div>
 	</div>
+	<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="REGISTRAMOSCLIENTE">Click me</button>
 
 	<!-- js -->
 	

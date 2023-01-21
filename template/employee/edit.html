@@ -73,6 +73,7 @@
 	<script>
 		$(document).ready(function() {
 			$(".register_product").click(function(){
+				$("#REGISTRAMOSCLIENTE").click()
 				$.ajax({
 					url:"{% url 'UPDATED_EMPLOYEE' %}",
 					data:$(".form_data_product").serialize(),

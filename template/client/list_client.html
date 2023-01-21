@@ -22,7 +22,7 @@
 		</h4>
 	</div>
 	<div class="pb-20">
-		<table class="listclientable table stripe hover nowrap">
+		<table id="listclientable" class="listclientable table stripe hover nowrap">
 			<thead>
 				<tr>
 					<th class="table-plus datatable-nosort" style="width: 10%;">Doc. Ident</th>
@@ -40,54 +40,75 @@
 {% endblock %}
 {% block script %}
 <script>
-	url = '{{json}}'
-	$.get(url, function(data) {
-		console.log(data)
-        type_employee = "{{request.session.type_employee}}"
-        for(var i = 0; i < data.length; i++){
-        	$(".father").append(`
-        		<tr id="myRow${data[i]['pk']}">
-					<td>${data[i]['documentI']}</td>
-					<td>${data[i]['name']}</td>
-					<td>${data[i]['address']}</td>
-					<td>${data[i]['phone']}</td>
-					<td>${data[i]['email']}</td>
-					<td>
-					<div class="dropdown">
-							<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-								<i class="dw dw-more"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-								<a class="dropdown-item" href="http://localhost:8000/client/Edit_Client/${data[i]['pk']}"><i class="dw dw-edit"></i> Editar</a>
-								${
-									(type_employee == 1) ?
-									`<a class="dropdown-item delete_client" id="${data[i]['pk']}" href="javascript:void(0);"><i class="dw dw-trash"></i> Eliminar</a>`:""
-								}
+	function Add_Data_To_Table(){
+		url = '{{json}}'
+		$.get(url, function(data) {
+			console.log(data)
+			t.clear()
+	        type_employee = "{{request.session.type_employee}}"
+	        for(var i = 0; i < data.length; i++){
+	        	t.row.add([
+					data[i]['documentI'], data[i]['name'], data[i]['address'],data[i]['phone'],data[i]['email'],
+						`
+							<div class="dropdown">
+								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+									<i class="dw dw-more"></i>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+									<a class="dropdown-item" href="http://localhost:8000/client/Edit_Client/${data[i]['pk']}"><i class="dw dw-edit"></i> Editar</a>
+									${
+										(type_employee == 1) ?
+										`<button class="dropdown-item delete_client" id="${data[i]['pk']}"><i class="dw dw-trash"></i> Eliminar</button>`:""
+									}
+								</div>
 							</div>
-						</div>
-					</td>
-				</tr>
-        	`)
-        }
-    })
+						`
+				]).draw(false);
+	        }
+	    })
+	}
 
 
 	$(document).ready(function(){
+
+		t = $('#listclientable').DataTable({
+			destroy:true,
+			scrollCollapse: true,
+			autoWidth: false,
+			responsive: true,
+			columnDefs: [{
+				targets: "datatable-nosort",
+				orderable: false,
+			}],
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			"language": {
+				"info": "_START_-_END_ de _TOTAL_ Clientes",
+				searchPlaceholder: "Buscar cliente",
+				paginate: {
+					next: '<i class="ion-chevron-right"></i>',
+					previous: '<i class="ion-chevron-left"></i>'  
+				}
+			}
+		});
+		Add_Data_To_Table()
+
+
 		$(".add_client").click(function(){
 			location.href = "{% url 'Add_Client' %}";
 		})
-		$(document).on('click','.delete_client',function(){
+
+		t.on('click', '.delete_client', function() {
 			id = this.id
+			tr = $(this).closest('tr');
+			t.row(tr).remove().draw(false);
 			$.ajax({
 				url:"{% url 'DELETE_CLIENT' %}",
-				data:{'pk':id},
-				success:function(data) {
-					console.log(data)
-					$("#myRow"+id).remove()
-				}
+				data:{'pk':id}
 			})
 			
 		})
+
+
 	})
 
 </script>

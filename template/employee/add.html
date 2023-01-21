@@ -71,6 +71,7 @@
 	<script>
 		$(document).ready(function(){
 			$(".register_client").click(function(){
+				$("#REGISTRAMOSCLIENTE").click()
 				$.ajax({
 					data:$(".form_data_client").serialize(),
 					success:function(data){

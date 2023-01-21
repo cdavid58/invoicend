@@ -82,10 +82,6 @@ def GET_LIST_INVOICE(request):
 	list_invoice_fe = query.GET_LIST_INVOICE(request,1)
 	with open(env.FILE_JSON_INVOICE_FE, 'w') as file:
 		json.dump(list_invoice_fe, file, indent=4)
-	if request.is_ajax():
-		with open(env.FILE_JSON_INVOICE_FE) as file:
-			data = json.load(file)
-		return HttpResponse(data)
 	return render(request,'list_invoice/invoice.html',{'json':enviroments_json + "/static/data_fe.json"})
 
 def View_Invoice(request,pk):

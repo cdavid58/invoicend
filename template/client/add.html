@@ -2,12 +2,6 @@
 {% block loading %}Agreguemos un cliente{% endblock %}
 {% block content %}
 <div class="alert_register_2"></div>
-<div class="alert alert-primary alert-dismissible fade show alert_register" hidden role="alert">
-	<strong>Cliente Registrado Exitosamente!.</strong>
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		<span aria-hidden="true">×</span>
-	</button>
-</div>
 <div class="pd-20 card-box mb-30">
 	<div class="clearfix">
 		<div class="pull-left">
@@ -80,8 +74,10 @@
 		</div>
 	</form>
 </div>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="ERROR_DOCUMENT_LENGTH">Click me</button>
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="CLIENT_SUCCES">Click me</button>
 
-
+<button type="button" class="btn mb-20 btn-primary btn-block" hidden id="CLIENTEXIST">Click me</button>
 {% endblock %}
 {% block script %}
 <script>
@@ -104,22 +100,34 @@
 		GetData("municipality","http://localhost:8000/static/municipalitys.json")
 
 		$(".register_client").click(function(){
-			$.ajax({
-				url:"{% url 'CREATE_CLIENT' %}",
-				data:$(".form_data_client").serialize(),
-				success:function(data){
-					if(data == "True"){
-						$("form select").each(function() { this.selectedIndex = 0 });
-     					$("form input[type=text]").each(function() { this.value = '' });
-     					$("form input[type=number]").each(function() { this.value = '' });
-     					$('.alert_register').prop('hidden',false)
-						$('html, body').animate({
-							scrollTop: $(".alert_register_2").offset().top
-			 			}, 1000);
-			 			$(".docI").focus()
+			if($(".docI").val().length == 9 || $(".docI").val().length == 12){
+				$("#REGISTRAMOSCLIENTE").click()
+				$.ajax({
+					url:"{% url 'CREATE_CLIENT' %}",
+					data:$(".form_data_client").serialize(),
+					success:function(data){
+						console.log(data)
+						data = JSON.parse(data)
+						if(data['result']){
+							$("form select").each(function() { this.selectedIndex = 0 });
+	     					$("form input[type=text]").each(function() { this.value = '' });
+	     					$("form input[type=number]").each(function() { this.value = '' });
+	     					$('.alert_register').prop('hidden',false)
+							$('html, body').animate({
+								scrollTop: $(".alert_register_2").offset().top
+				 			}, 1000);
+				 			$(".docI").focus()
+				 			$("#CLIENT_SUCCES").click()
+						}
+						else{
+							$("#CLIENTEXIST").click()
+						}
 					}
-				}
-			})
+				})
+			}
+			else{
+				$("#ERROR_DOCUMENT_LENGTH").click()
+			}
 		})
 	})
 </script>
